@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Basketball - 2 Player</title>
+    <link rel="stylesheet" href="css/style.css?v=3">
+<script src="https://stat.ktn.md/s.js" async></script>
+</head>
+
+<body class="theme-dark">
+    <div id="container">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="gameCanvas" width="960" height="540"></canvas>
+        <button id="cambtn" class="ctrl-btn" title="Kamera Değiştir">🤳</button>
+        <button id="mutebtn" class="ctrl-btn" title="Sesi Kapat">🔊</button>
+        <button id="fsbtn" class="ctrl-btn" title="Tam Ekran">
+            <svg viewBox="0 0 24 24">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+        </button>
+        <div id="ui">
+            <div class="pscore" id="p1s">P1: <span>0</span></div>
+            <div id="tmr">Süre: <span id="tv">5:00</span></div>
+            <div class="pscore" id="p2s">P2: <span>0</span></div>
+            <div id="msg"></div>
+        </div>
+        <div id="ss">
+            <h1>🏀 Webcam Basketball</h1>
+            <p>
+                Kamera önünde vücudunuzla topa vurun!<br>
+                Kafanız, kolunuz, eliniz — <b>her yeriniz</b> ile oynayın!<br><br>
+                <b style="color:#3b82f6">Oyuncu 1 (Sol)</b> → Sol pota &nbsp;|&nbsp;
+                <b style="color:#ef4444">Oyuncu 2 (Sağ)</b> → Sağ pota
+            </p>
+
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label>Süre: <span id="timeLabel">5:00</span></label>
+                    <input type="range" id="timeSlider" min="30" max="600" step="30" value="300">
+                </div>
+                <div class="setting-item">
+                    <label>Yerçekimi: <span id="gravLabel">Normal</span></label>
+                    <input type="range" id="gravSlider" min="0.08" max="0.35" step="0.01" value="0.18">
+                </div>
+                <div class="setting-item">
+                    <label>Tema</label>
+                    <select id="themeSelect">
+                        <option value="dark">🌙 Koyu</option>
+                        <option value="neon">💚 Neon</option>
+                        <option value="light">☀️ Açık</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Top</label>
+                    <select id="skinSelect">
+                        <option value="basketball">🏀 Basketbol</option>
+                        <option value="tennis">🎾 Tenis</option>
+                        <option value="football">⚽ Futbol</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Bot Zorluk</label>
+                    <select id="diffSelect">
+                        <option value="easy">😊 Kolay</option>
+                        <option value="normal" selected>💪 Normal</option>
+                        <option value="hard">🔥 Zor</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Kamera</label>
+                    <select id="camSelect">
+                        <option value="user">🤳 Ön Kamera</option>
+                        <option value="environment">📷 Arka Kamera</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mode-btns">
+                <button id="sbtn" disabled>Yükleniyor...</button>
+                <button id="aibtn" disabled>Yükleniyor...</button>
+                <button id="tbtn" disabled>Yükleniyor...</button>
+            </div>
+            <div id="lm">Model yükleniyor...</div>
+            <div id="credit">Bu oyun <b>Fatih Tuzcu</b> tarafından yapılmıştır.</div>
+        </div>
+    </div>
+
+    <!-- TensorFlow.js & Pose Detection -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.17.0/dist/tf-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@4.17.0/dist/tf-converter.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.17.0/dist/tf-backend-webgl.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.1.3/dist/pose-detection.min.js"></script>
+
+    <!-- Game -->
+    <script src="js/audio.js?v=3"></script>
+    <script src="js/court.js?v=3"></script>
+    <script src="js/game.js?v=3"></script>
+    <script src="js/render.js?v=3"></script>
+    <script src="js/app.js?v=3"></script>
+</body>
+
+</html>
