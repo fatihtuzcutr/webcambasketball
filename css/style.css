@@ -1,0 +1,579 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Theme backgrounds */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    transition: background 0.3s;
+}
+
+body.theme-dark {
+    background: #0f0f23;
+}
+
+body.theme-neon {
+    background: #0a0a1a;
+}
+
+body.theme-light {
+    background: #e8e0d0;
+}
+
+#container {
+    position: relative;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.78vh;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+}
+
+#webcam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+}
+
+#gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+#ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Score boxes — larger */
+.pscore {
+    position: absolute;
+    top: 10px;
+    padding: 10px 24px;
+    border-radius: 14px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+    backdrop-filter: blur(8px);
+    min-width: 100px;
+    text-align: center;
+}
+
+#p1s {
+    left: 12px;
+    background: rgba(59, 130, 246, 0.7);
+    border: 2px solid rgba(59, 130, 246, 0.9);
+}
+
+#p2s {
+    right: 170px;
+    background: rgba(239, 68, 68, 0.7);
+    border: 2px solid rgba(239, 68, 68, 0.9);
+}
+
+/* Timer */
+#tmr {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 28px;
+    border-radius: 14px;
+    font-size: 28px;
+    font-weight: bold;
+    backdrop-filter: blur(8px);
+}
+
+#tmr span {
+    color: #4ecdc4;
+}
+
+#msg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 42px;
+    font-weight: bold;
+    text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.9);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: pre-line;
+}
+
+/* Start Screen */
+#ss {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    pointer-events: all;
+    backdrop-filter: blur(6px);
+    overflow-y: auto;
+}
+
+#ss h1 {
+    font-size: 42px;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 20px rgba(78, 205, 196, 0.3);
+    letter-spacing: -0.5px;
+}
+
+#ss p {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 22px;
+    text-align: center;
+    line-height: 1.9;
+    max-width: 540px;
+}
+
+/* Settings Grid */
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 460px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px 24px;
+}
+
+.setting-item {
+    text-align: center;
+}
+
+.setting-item label {
+    display: block;
+    color: #888;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.setting-item label span {
+    color: #4ecdc4;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.setting-item input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ecdc4, #3b82f6);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(78, 205, 196, 0.4);
+}
+
+.setting-item input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ecdc4, #3b82f6);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(78, 205, 196, 0.4);
+}
+
+.setting-item select {
+    width: 100%;
+    padding: 8px 28px 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.setting-item select:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.setting-item select:focus {
+    border-color: #4ecdc4;
+    box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.15);
+}
+
+.setting-item select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+/* Mode buttons */
+.mode-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#sbtn,
+#aibtn,
+#tbtn {
+    padding: 12px 32px;
+    font-size: 17px;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+    pointer-events: all;
+    letter-spacing: 0.2px;
+}
+
+#sbtn {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+#aibtn {
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+#tbtn {
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+#sbtn:hover,
+#aibtn:hover,
+#tbtn:hover {
+    transform: translateY(-2px) scale(1.03);
+}
+
+#sbtn:hover { box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45); }
+#aibtn:hover { box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45); }
+#tbtn:hover { box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45); }
+
+#sbtn:active,
+#aibtn:active,
+#tbtn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+#sbtn:disabled,
+#aibtn:disabled,
+#tbtn:disabled {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+}
+
+#lm {
+    margin-top: 14px;
+    color: #666;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#credit {
+    margin-top: 18px;
+    color: #555;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+}
+
+/* Control buttons — shared */
+.ctrl-btn {
+    position: absolute;
+    top: 14px;
+    z-index: 4;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, transform 0.15s;
+    padding: 0;
+    font-size: 20px;
+    color: white;
+}
+
+.ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.08);
+}
+
+#fsbtn { right: 14px; }
+#mutebtn { right: 66px; }
+#cambtn { right: 118px; }
+
+#fsbtn svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---- MOBILE RESPONSIVE ---- */
+@media (max-width: 768px) {
+    body {
+        align-items: flex-start;
+    }
+
+    #container {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        max-height: none;
+        box-shadow: none;
+    }
+
+    /* Smaller score boxes */
+    .pscore {
+        padding: 6px 14px;
+        font-size: 20px;
+        border-radius: 10px;
+        min-width: 70px;
+    }
+
+    #p2s {
+        right: 60px;
+    }
+
+    /* Smaller timer */
+    #tmr {
+        padding: 6px 16px;
+        font-size: 18px;
+        border-radius: 10px;
+    }
+
+    #msg {
+        font-size: 28px;
+    }
+
+    /* Smaller top buttons */
+    .ctrl-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        top: 8px;
+        font-size: 16px;
+    }
+
+    #fsbtn { right: 8px; }
+    #mutebtn { right: 50px; }
+    #cambtn { right: 92px; }
+
+    #fsbtn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Start screen mobile */
+    #ss {
+        padding: 16px;
+    }
+
+    #ss h1 {
+        font-size: 26px;
+        margin-bottom: 4px;
+    }
+
+    #ss p {
+        font-size: 11px;
+        margin-bottom: 10px;
+        line-height: 1.6;
+        padding: 0 8px;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 12px;
+        max-width: 100%;
+        padding: 14px 12px;
+        margin-bottom: 14px;
+    }
+
+    .setting-item label {
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
+
+    .setting-item label span {
+        font-size: 12px;
+    }
+
+    .setting-item select {
+        padding: 6px 24px 6px 8px;
+        font-size: 11px;
+    }
+
+    .setting-item input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .setting-item input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .mode-btns {
+        gap: 8px;
+    }
+
+    #sbtn,
+    #aibtn,
+    #tbtn {
+        padding: 10px 18px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    #lm {
+        font-size: 11px;
+    }
+}
+
+/* Very small screens (phones in portrait) */
+@media (max-width: 480px) {
+    .pscore {
+        padding: 4px 10px;
+        font-size: 16px;
+        min-width: 55px;
+    }
+
+    #p2s {
+        right: 50px;
+    }
+
+    #tmr {
+        padding: 4px 12px;
+        font-size: 14px;
+    }
+
+    #msg {
+        font-size: 22px;
+    }
+
+    #ss h1 {
+        font-size: 22px;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    #sbtn,
+    #aibtn,
+    #tbtn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+}
+
+/* Landscape mobile — optimal game view */
+@media (max-height: 500px) and (orientation: landscape) {
+    #ss {
+        padding: 8px;
+        justify-content: flex-start;
+        overflow-y: auto;
+    }
+
+    #ss h1 {
+        font-size: 22px;
+        margin-bottom: 4px;
+    }
+
+    #ss p {
+        font-size: 10px;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 6px 10px;
+        margin-bottom: 8px;
+    }
+
+    .mode-btns {
+        gap: 6px;
+    }
+
+    #sbtn,
+    #aibtn,
+    #tbtn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
